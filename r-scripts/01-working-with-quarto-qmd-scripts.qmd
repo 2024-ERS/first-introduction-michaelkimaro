@@ -6,6 +6,8 @@ format: html
 editor: 
   markdown: 
     wrap: 72
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Working with Quarto documents in R
@@ -87,8 +89,9 @@ C <- A+B
 print(C)
 ```
 
+Make a plot
 ```{r, message = FALSE, warning = FALSE}
-#| label: fig-histogram
+#| label: fig-histogram. You can call it fig.1, fig. 2, fig. 3, etc
 #| fig-cap: Histogram of 100 random values from a normal distribution with 0 mean and 1 standard deviation
 
 library(tidyverse)
@@ -98,6 +101,8 @@ set.seed(123)
 randomvalue <- rnorm(n = 100, mean = 0, sd = 1)
 # convert to a dataframe
 data1<-data.frame(randomvalue)
+print(data1)
+
 # plot as a histogram
 ggplot2::ggplot(data=data1, 
                 mapping=aes(x=randomvalue)) +
