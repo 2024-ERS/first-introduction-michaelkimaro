@@ -18,7 +18,8 @@ Working with Quarto has a range of benefits:
 
 -   Using its headers creates an automated outline of your script (see
     pane to the right), this helps in navigating around in your script
--   You can mix regular text with R script, for example to introduce the philosophy or assumptions of a particular analysis, and/or to
+-   You can mix regular text with R script, for example to introduce the
+    philosophy or assumptions of a particular analysis, and/or to
     summarize the conclusions that you draw from the analysis
 -   formatting of headers, tables, figure captions etc is
     near-automatic, you hardly need to think about it
@@ -33,7 +34,13 @@ Working with Quarto has a range of benefits:
 
 ### 2. Markdown, R Markdown and Quarto
 
-Markdown is a lightweight markup language used to format plain text in a simple, human-readable way. It is a simple way to format headers, tables etc for still a simple text document, such as this text, using plain text formatting. Files have the .md extension. For example, the '\#' infront of the first line of this document indicates that it is a title, and needs to be formatted like that. If you switch this window of this text to the tab "visual" you see what happens. Markdown is lightweight
+Markdown is a lightweight markup language used to format plain text in a
+simple, human-readable way. It is a simple way to format headers, tables
+etc for still a simple text document, such as this text, using plain
+text formatting. Files have the .md extension. For example, the '\#'
+infront of the first line of this document indicates that it is a title,
+and needs to be formatted like that. If you switch this window of this
+text to the tab "visual" you see what happens. Markdown is lightweight
 eg compared to html (how most internet pages are written), which allows
 much more formatting, and makes files practically not readable anymore
 with a regular text editor.
@@ -77,6 +84,7 @@ starting with #\| and then the script itself. This code chunk can be run
 as a block of code by using the small green arrow at the top right.
 
 Make a simple code block
+
 ```{r}
 #define a variable A and assign the value 5 to it
 A <- 5
@@ -90,6 +98,7 @@ print(C)
 ```
 
 Make a plot
+
 ```{r, message = FALSE, warning = FALSE}
 #| label: fig-histogram. You can call it fig.1, fig. 2, fig. 3, etc
 #| fig-cap: Histogram of 100 random values from a normal distribution with 0 mean and 1 standard deviation
@@ -158,7 +167,7 @@ set if you want different aspects as the code itself, the output from
 that code, warnings, etc in the output document.
 
 | Execute option: | Descript                                                                                                                                                                                    |
-|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|----------------|--------------------------------------------------------|
 | eval            | Evaluate the code chunk (if false, just echos the code into the output). echo Include the source code in output                                                                             |
 | output          | Include the results of executing the code in the output (true, false, or asis to indicate that the output is raw markdown and should not have any of Quarto’s standard enclosing markdown). |
 | warning         | Include warnings in the output.                                                                                                                                                             |
