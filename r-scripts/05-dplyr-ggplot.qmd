@@ -53,7 +53,8 @@ add a regression line through all the years
 ```{r}
 
 # there are large outliers due to likely data entry mistakes
-FactCockleSize2 <- FactCockleSize |> dplyr::filter(thickness_mm<500)
+FactCockleSize2 <- FactCockleSize |> dplyr::filter(thickness_mm<500) |>
+  mutate(year=factor(year)) #make year factor
 
 ggplot2::ggplot(data = FactCockleSize2, aes(length_mm,thickness_mm))+
   geom_point()
@@ -62,20 +63,32 @@ ggplot2::ggplot(data = FactCockleSize2, aes(length_mm,thickness_mm))+
 Further explore the plot with a regression line through all the data
 
 ```{r}
+ggplot2::ggplot(data = FactCockleSize2, aes(length_mm,thickness_mm))+
+  geom_point()+
+  geom_smooth(method = "lm")
 ```
 
 Make same plot but showing a separate regression line per year
 
 ```{r}
+model_line <-lm(thickness_mm~length_mm, data = FactCockleSize2)
+summary(model_line)
+
 # color the points by year, but plot one regression line
+ggplot2::ggplot(data = FactCockleSize2, aes(length_mm,thickness_mm))+
+  geom_point(aes(col=year))+
+  geom_smooth(method = "lm")
 ```
 
 Make a panel plot where with each year is shown as a separate graph
 
 ```{r}
+ggplot2::ggplot(data = FactCockleSize2, aes(length_mm,thickness_mm))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  facet_wrap(~year)
 ```
 
 We conclude from this that: \* there were two important outliers in the
 dataset that were removed after visual inspection \* the regression
-between length and width is abou the same for every year, we safely can
-use only length as a proxy for the biomass of an individual cockle
+between length and width is about the same for every year, we safely can use only length as a proxy for the biomass of an individual cockle
