@@ -1,6 +1,6 @@
 ---
 title: "Starting with with the dplyr, ggplot2 packages, and the pipe operator |>"
-author: "Han Olff"
+author: "Han Olff modified by Michael"
 date: "2024-08-29"
 format: html
 editor: 
@@ -42,6 +42,8 @@ Read the FactCockleSize table with read_csv, which reads it as tibble
 
 ```{r}
 FactCockleSize <- readr::read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSpormjGiM4uWMTIZYm9Upt5j1Ige_Wu9CrhGGdvjXwxmHP2R6S7JDyEmiGTn3fXihl5s5yBn_sdo8h/pub?gid=1538766002&single=true&output=csv")
+
+print(FactCockleSize)
 ```
 
 Plot with ggplot the relation between cockle thickness (thickness_mm, as
@@ -50,6 +52,11 @@ add a regression line through all the years
 
 ```{r}
 
+# there are large outliers due to likely data entry mistakes
+FactCockleSize2 <- FactCockleSize |> dplyr::filter(thickness_mm<500)
+
+ggplot2::ggplot(data = FactCockleSize2, aes(length_mm,thickness_mm))+
+  geom_point()
 ```
 
 Further explore the plot with a regression line through all the data
