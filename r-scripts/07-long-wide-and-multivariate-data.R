@@ -89,3 +89,10 @@ vdat5 %>% filter(rank<=10) %>%
 
 cut(vdat5$elevation_m,13)
 
+# plot the change in cover along the elevation gradient and over different 10 years
+
+vdat5 %>% filter(rank<=10) %>%
+  ggplot(aes(elevation_m, cover,col=as.factor(year))) +
+  geom_point() +
+  geom_smooth(method = "loess", se=FALSE) +
+  facet_wrap(~Species_ID, ncol=2)
