@@ -31,6 +31,7 @@ vdat1<-vdat %>%
 
 #show the names of all the species in the dataset
 vdat1
+unique(vdat1$Species_ID)
 
 # find the most abundant species in the dataset
 # add a variable to the dataset that is the rank number of the species 
@@ -39,7 +40,7 @@ vdat1
 vdat2<-vdat1 %>%
   group_by(Species_ID) %>%
   summarise(sumcov=sum(cover,na.rm = T)) %>%
-  mutate(rank=rank(-sumcov)) %>%
+  mutate(rank=rank(-sumcov)) %>% #rank from lowest to highest
   arrange(rank)
 vdat2
 vdat1
@@ -47,6 +48,11 @@ vdat1
 vdat3<-left_join(vdat1,vdat2,by="Species_ID")
 vdat3
 ### plot the 5 most dominant species as a line diagram, cover (y) versus distance_m (x)with ggplot, separate plot for each year, each species with a different line color
+
+vdat3 %>% filter(rank<=5) %>%
+  ggplot(aes(x=TransectPoint_ID,y=cover,col=Species_ID)) +
+  geom_line() +
+  facet_wrap(~year)
 
 # plot the change in cover along the distance  transect 
 # and over the different years as a heatmap for the 10 most abundant species
