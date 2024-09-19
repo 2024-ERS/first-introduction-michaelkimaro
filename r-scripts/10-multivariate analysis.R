@@ -194,7 +194,7 @@ vegan::ordisurf(nmds_veg,vegdat$PlantMar,add=T,col="orange")
 # show the results of the detrended correspondence analysis
 
 # the eigenvalues represent the variation explained by each axis
-cca<-vegan::cca(vegdat~elevation_m+DistGulley_m+floodprob+redox5+redox10+clay_cm,data=envdat)
+cca<-vegan::cca(vegdat~elevation_m+DistGulley_m+floodprob+redox5+redox10+clay_cm,data=envdat, na.action=na.exclude)
 summary(cca)
 
 cca_final<-vegan::cca(vegdat~elevation_m+DistGulley_m+floodprob,data=envdat)
@@ -202,12 +202,18 @@ cca$colsum #species scores
 cca$rowsum # site scores
 
 # kick out variables that are least significant - simplify the model
-
+vegan::ordiplot(cca,display="sites",cex=1,type="t",xlab="CCA1 (23%)",ylab="CCA2 (18%)")
+vegan::orditorp(cca,dis="sp", priority=SpecTotCov,
+                col="red",pcol="red",pch="+",cex=1.1)
 
 # add the environmental factors to the cca ordination plot
 
+vegan::ordisurf(cca,envdat$floodprob,add=T,col="green")
+vegan::ordisurf(cca,envdat$DistGulley_m,add=T,col="blue")
 
 # test if the variables and axes (margins) are significant
+anova(cca,by="axis")
+anova(cca,by="margin")
 
 # You have measured the right things!
 # for example - test this if you would have only measured clay thickness
@@ -217,25 +223,66 @@ cca$rowsum # site scores
 ##### cluster analysis (classification) of  communities
 # first calculate a dissimilarity matrix, using Bray-Curtis dissimilarity
 
-
- # show the dissimilarity matrix (1= completely different, 0= exactly the same)
+d<-vegan::vegdist(vegdat,method="bray")
+d # show the dissimilarity matrix (1= completely different, 0= exactly the same)
 
 
 # now cluster the sites based on similarity in species composition 
 # using average linkage as the sorting algorithm
-
+cavg<-hclust(d,method="average")
+plot(cavg) 
 
 # back to  clustering based on species composition - show the dendrogram and cut in in 4 communities
 
+rect.hclust(cavg,4) #it shows 4 classes of sites with similar composition
+c4<-cutree(cavg,4)
+c4 #it labelled all sites with similar species composition
 
 ##### add the clustering of plots to your cca ordination
+vegan::ordiplot(cca,display="sites",cex=1,type="t",xlab="CCA1 (0.87)",ylab="CCA2 (0.69)")
+vegan::orditorp(cca,dis="sp", priority=SpecTotCov,
+                col="red",pcol="red",pch="+",cex=1.1)
+vegan::ordihull(cca,c4,lty = 2,col="green3",lwd=2)
 
 #add the vegetation type to the environmental data
 
+envdat2<-envdat %>%
+  dplyr::mutate(vegtype=factor(c4))
+envdat2
+envdat2$vegtype
+levels(envdat2$vegtype)<-c("Dune","High saltmarsh", "Low saltmarsh","Pioneer zone") #put names of most dominant species per cluster
+
+library(patchwork)
+p1<-envdat2 %>% ggplot(aes(x=vegtype,y=floodprob)) +
+  ylim(0,0.06) +
+  geom_boxplot() +
+  xlab(NULL)
+p1
+
+p2<-envdat2 %>% ggplot(aes(x=vegtype,y=DistGulley_m)) +
+  ylim(0,400) +
+  geom_boxplot() +
+  xlab(NULL)
+p2
+
+p3<-envdat2 %>% ggplot(aes(x=vegtype,y=elevation_m)) +
+  geom_boxplot()
+p3
+
+p1+p2+p3+patchwork::plot_layout(ncol=1)
+
 # test if DistGulley_m is different between the vegetation types
+
+m1<-lm(DistGulley_m~vegtype,data=envdat2)
+anova(m1)
 
 # what do you write: 
 # the vegetation types were significantly different in distance to gulley (F3,18=21.36, P<0.001)
 # * P<0.05, ** P<0.01, *** P<0.001
+
+library(multcomp)
+m1.tukey<-multcomp::glht(m1,mcp(vegtype="Tukey")) # only if your overall F test is significant
+m1.tukey
+multcomp::cld(m1.tukey)
 
 # means with the same letter are not significantly different
