@@ -33,17 +33,17 @@ tail(dat_month,20) # note the definition of the metyear_nov and metyear_dec vari
 # plot monthly average temperature with 5-year running average
 dat_month %>% ggplot(aes(x=mdate,y=avgtemp_mo_oC)) +
   geom_line() +
-  tidyquant::geom_ma(ma_fun=SMA,n=60,col="red",linetype="solid") +
-  #  coord_x_date(xlim=c("2001-01-01", "2024-08-31")) +
-  ggtitle("temperature Lauwersoog") +
-  theme(text = element_text(size=20))
+  tidyquant::geom_ma(ma_fun=SMA,n=61,col="red",linetype="solid") +
+    coord_x_date(xlim=c("2000-01-01", "2024-08-31")) +
+  ggtitle("Monthly temperature at Lauwersoog") +
+  theme(text = element_text(size=16)) #SMA is Smoothed Moving Average (for our case number of months) and n is the number of observations to average over
 
 
 # plot monthly rainfall with 1-year running average
 dat_month %>% ggplot(aes(x=mdate,y=totrain_mo_mm)) +
   geom_line(linewidth=0.7) +
-  tidyquant::geom_ma(ma_fun=SMA,n=12,col="red",linetype="solid",linewidth=1) +
-  coord_x_date(xlim=c("2001-01-01", "2024-09-01")) +
+  tidyquant::geom_ma(ma_fun=SMA,n=13,col="red",linetype="solid",linewidth=1) +
+  coord_x_date(xlim=c("2014-01-01", "2024-09-01")) +
   xlab("date") +
   ylab("total monthly rainfall") +
   ggtitle("Lauwersoog") +
@@ -141,10 +141,11 @@ dat_WarmthIndex %>%
   geom_point(size=3) +
   geom_line(aes(x=year,y=pred_q10),col="blue",linewidth=1) +
   geom_line(aes(x=year,y=pred_q50),col="orange",linewidth=1) +
-  geom_line(aes(x=year,y=pred_q90),col="red",linewidth=1) +
+  geom_line(aes(x=year,y=pred_q90),col="green",linewidth=1) +
   xlab("summer (april - august)") +
   ylab("Warmth index") +
   ggtitle("Warmth index Lauwersoog station") +
-  theme(text = element_text(size=12))
+  theme(text = element_text(size=12))+
+  geom_smooth(method="lm",col="red")
 # note the hot summer of 2018, which likely killed the cockle cohort
 # summer of 2011 was cool, and that previous winter was cold 
