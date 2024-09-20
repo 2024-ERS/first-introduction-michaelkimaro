@@ -65,6 +65,7 @@ floodprob %>%
 # plot Orchestia (y) versus elevation_m (x) in ggplot as a scatterplot, with each year as a different color
 p1<- orchdat3  %>% 
   ggplot(aes(x=elevation_m,y=CountSum,color=year)) +
+  geom_smooth(method="glm",formula = "y~x+I(x^2)", method.args=list(family="poisson"), se=F) +
   geom_point(size=3) 
 p1
 
